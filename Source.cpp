@@ -102,6 +102,36 @@ public:
 	}
 };
 
+class CThree : public CTwo
+{
+private:
+	int a;
+public:
+	//конструктор умолчания
+	CThree() {}
+	//конструктор с параметрами
+	CThree(double d, COne*p, int a) : CTwo(d,p), a(a) {}
+	//конструктор копирования
+	CThree(const CThree& other) : CTwo(other), a(other.a) {}
+	//деструктор
+	~CThree()
+	{
+		cout << "Destructor CThree" << endl;
+		cout << "a = " << a << " deleted" << endl;
+	}
+	//метод доступа
+	int get_a() const
+	{
+		return a;
+	}
+	//вывод
+	void print()
+	{
+		CTwo::print();
+		cout << "CThree: a = " << a;
+	}
+};
+
 void line()
 {
 	cout << "\n~~~~~~~~~~~~~~~~~~~~~~~~\n";
@@ -123,6 +153,13 @@ int main()
 	cout << n2.get_p() << endl;
 	CTwo copy_n2 = n2;
 	copy_n2.print();
+	line();
+	CThree n3(67.8, &n1, 10);
+	n3.print();
+	cout << endl;
+	n3.get_a();
+	CThree copy_n3 = n3;
+	copy_n3.print();
 	line();
 	return 0;
 }
