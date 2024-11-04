@@ -16,7 +16,7 @@ public:
 	//конструктор с параметрами
 	COne(double d, string s) : d(d), s(s) {}
 	//конструктор копирования
-	COne(const COne& other) : d(other.d), s(other.s) {}
+	COne(const COne& copy) : d(copy.d), s(copy.s) {}
 	//деструктор
 	~COne() 
 	{
@@ -25,10 +25,10 @@ public:
 		cout << "s = " << s << " deleted" << endl;
 	}
 	//оператор присваивания
-	COne& operator=(const COne& other) {
-		if (this != &other) {
-			d = other.d;
-			s = other.s;
+	COne& operator=(const COne& copy) {
+		if (this != &copy) {
+			d = copy.d;
+			s = copy.s;
 		}
 		return *this;
 	}
@@ -42,7 +42,7 @@ public:
 		return s; 
 	}
 	//вывод на экран
-	void print()
+	void print() const
 	{
 		cout << "COne: d = " << d << ", s = " << s;
 	}
@@ -61,7 +61,7 @@ public:
 	//конструктор с параметрами
 	CTwo(double d, COne* p) : d(d), p(p) {}
 	//конструктор копирования
-	CTwo(const CTwo& other) : d(other.d), p(new COne(*other.p)) {}
+	CTwo(const CTwo& copy) : d(copy.d), p(new COne(*copy.p)) {}
 	//деструктор
 	~CTwo()
 	{
@@ -70,10 +70,10 @@ public:
 		cout << "&p = " << p << " deleted" << endl;
 	}
 	//оператор присваивания
-	CTwo& operator=(const CTwo& other) {
-		if (this != &other) {
-			d = other.d;
-			p = new COne(*other.p);
+	CTwo& operator=(const CTwo& copy) {
+		if (this != &copy) {
+			d = copy.d;
+			p = new COne(*copy.p);
 		}
 		return *this;
 	}
@@ -87,7 +87,7 @@ public:
 		return p;
 	}
 	//вывод
-	void print()
+	virtual void print() const
 	{
 		cout << "CTwo: d = " << d << ", *p = ";
 		cout << "{ ";
@@ -112,7 +112,7 @@ public:
 	//конструктор с параметрами
 	CThree(double d, COne*p, int a) : CTwo(d,p), a(a) {}
 	//конструктор копирования
-	CThree(const CThree& other) : CTwo(other), a(other.a) {}
+	CThree(const CThree& copy) : CTwo(copy), a(copy.a) {}
 	//деструктор
 	~CThree()
 	{
@@ -125,12 +125,52 @@ public:
 		return a;
 	}
 	//вывод
-	void print()
+	virtual void print() const override
 	{
 		CTwo::print();
-		cout << "CThree: a = " << a;
+		cout << " CThree: a = " << a;
 	}
 };
+
+class CFour : public CThree
+{
+private:
+	float b;
+public:
+	//конструктор умолчания
+	CFour() {}
+	//конструктор с параметрами
+	CFour(double d,COne* p, int a, float b) : CThree(d,p,a), b(b) {}
+	//конструктор копирования
+	CFour(const CFour& copy) : CThree(copy), b(copy.b) {}
+	//деструктор
+	~CFour()
+	{
+		cout << "Destructor CFour" << endl;
+		cout << "b = " << b << " deleted" << endl;
+	}
+	//метод доступа
+	float get_b() const
+	{
+		return b;
+	}
+	//вывод
+	virtual void print() const override
+	{
+		CThree::print();
+		cout << " CFour: b = " << b;
+
+	}
+};
+
+void printAll(CTwo* arr_ptr[], int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		arr_ptr[i]->print();
+		cout << endl;
+	}
+}
 
 void line()
 {
@@ -139,27 +179,14 @@ void line()
 int main()
 {
 	COne n1(12.5, "Object 1");
+	CTwo n2(102.76, &n1);
+	CThree n3(67.8, &n1, 10);
+	CFour n4(12.3, &n1, 6, 0.18);
+	CTwo* arr_ptr[] = { &n2, &n3, &n4 };
+	int n = sizeof(arr_ptr) / sizeof(arr_ptr[0]);
 	n1.print();
 	cout << endl;
-	cout << n1.get_d() << endl;
-	cout << n1.get_s() << endl;
-	COne copy_n1 = n1;
-	copy_n1.print();
-	line();
-	CTwo n2(102.76, &n1);
-	n2.print();
-	cout << endl;
-	cout << n2.get_d() << endl;
-	cout << n2.get_p() << endl;
-	CTwo copy_n2 = n2;
-	copy_n2.print();
-	line();
-	CThree n3(67.8, &n1, 10);
-	n3.print();
-	cout << endl;
-	n3.get_a();
-	CThree copy_n3 = n3;
-	copy_n3.print();
+	printAll(arr_ptr, n);
 	line();
 	return 0;
 }
