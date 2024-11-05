@@ -16,7 +16,7 @@ public:
 	//конструктор с параметрами
 	COne(double d, string s) : d(d), s(s) {}
 	//конструктор копирования
-	COne(const COne& other) : d(other.d), s(other.s) {}
+	COne(const COne& copy) : d(copy.d), s(copy.s) {}
 	//деструктор
 	~COne() 
 	{
@@ -61,7 +61,7 @@ public:
 	//конструктор с параметрами
 	CTwo(double d, COne* p) : d(d), p(p) {}
 	//конструктор копирования
-	CTwo(const CTwo& other) : d(other.d), p(new COne(*other.p)) {}
+	CTwo(const CTwo& copy) : d(copy.d), p(new COne(*copy.p)) {}
 	//деструктор
 	~CTwo()
 	{
