@@ -25,10 +25,10 @@ public:
 		cout << "s = " << s << " deleted" << endl;
 	}
 	//оператор присваивания
-	COne& operator=(const COne& other) {
-		if (this != &other) {
-			d = other.d;
-			s = other.s;
+	COne& operator=(const COne& copy) {
+		if (this != &copy) {
+			d = copy.d;
+			s = copy.s;
 		}
 		return *this;
 	}
@@ -70,10 +70,10 @@ public:
 		cout << "&p = " << p << " deleted" << endl;
 	}
 	//оператор присваивания
-	CTwo& operator=(const CTwo& other) {
-		if (this != &other) {
-			d = other.d;
-			p = new COne(*other.p);
+	CTwo& operator=(const CTwo& copy) {
+		if (this != &copy) {
+			d = copy.d;
+			p = new COne(*copy.p);
 		}
 		return *this;
 	}
